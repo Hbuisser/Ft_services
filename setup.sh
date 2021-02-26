@@ -20,14 +20,8 @@ function check_docker() {
 	if [ "$?" != 0 ]
 	then
 		printf "Docker isn't installed!\n"
-        sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate \
-            docker-logrotate docker-engine
-        sudo yum install -y yum-utils
-        sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-        sudo yum-config-manager --enable docker-ce-nightly
-        sudo yum-config-manager --enable docker-ce-test
-        sudo yum install docker-ce docker-ce-cli containerd.io
-		printf "Docker is installed ✅\n"
+		printf "You can download it here : https://www.thegeekdiary.com/how-to-install-docker-on-mac/ \n"
+        exit 1
 	else
 		printf "Docker is installed ✅\n"
 	fi
