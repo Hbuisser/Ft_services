@@ -1,23 +1,38 @@
+# https://wiki.alpinelinux.org/wiki/Nginx
+
 FROM alpine:latest
+
+MAINTAINER Henry Buisseret <hbuisser@student.s19.be>
 
 # Install core service
 RUN     apk update \
-        && apk update
-#RUN		apk add nginx
-RUN     wget nginx
+        && apk add nginx \
+        && apk add openrc
 
-# Set workdir
-RUN		mkdir /tmp/ft_services_payload /www
-ADD		./nginx.conf /www/tmp/ft_services_payload
-ADD     ./init.sh /www/tmp/ft_services_payload
-WORKDIR	/tmp/ft_services_payload
-RUN     chmod +x init.sh
+# Creating new user and group 'www' for nginx
+RUN     adduser -D -g 'www' www
 
-# Moving necessary files
-ADD		nginx.conf /etc/nginx/
-#ADD		sshd_config /etc/ssh/
-ADD		index.html /www
+# Create a directory for html files
+RUN     mkdir /www \
+        && mkdir -p /run/nginx \
+        && chown -R www:www /var/lib/nginx \
+        && chown -R www:www /www
 
-EXPOSE	80 443 22
+# Backup of original nginx.conf file and remove it
+RUN     cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
+RUN     rm /etc/nginx/nginx.conf
 
-CMD ["/bin/sh", "/tmp/ft_services_payload/init.sh"]
+# Configuring Nginx to listen to port 80 and process .html or .htm files
+COPY    ./nginx.conf /etc/nginx/
+
+# Copy html into www
+COPY    ./index.html /www/
+
+# Indiquer le port sur lequel votre application écoute
+# 443 est le port https
+EXPOSE 80 443
+
+# Reload with the new config and start
+#RUN     rc-service nginx start
+RUN     nginx -t
+CMD ["nginx", "-g", "daemon off;"]
