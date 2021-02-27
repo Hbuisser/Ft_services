@@ -2,12 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
+  labels:
+    app: nginx
 spec:
+  replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
       app: nginx
+# Part for the pods, with also metadata and spec
   template:
     metadata:
       labels:
@@ -20,3 +24,32 @@ spec:
         ports:
         - containerPort: 80
         - containerPort: 443
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+# NodePort type expose the container to the outside world 
+  type: NodePort
+# link the deployemnt with the pods
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+# the service target port match the container port in the deployemnt
+      targetPort: 80
+      name: http
+      protocol: TCP
+    - port: 443
+      targetPort: 443
+      name: https
+      protocol: TCP
+    - port: 22
+      nodePort: 22
+      targetPort: 22
+      name: ssh

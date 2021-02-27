@@ -30,7 +30,7 @@ COPY    ./index.html /www/
 
 # Indiquer le port sur lequel votre application écoute
 # 443 est le port https
-EXPOSE 80 443
+EXPOSE 80 443 22
 
 # Reload with the new config and start
 #RUN     rc-service nginx start

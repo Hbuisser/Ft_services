@@ -85,6 +85,9 @@ function main() {
 
     docker build srcs/nginx -t img-nginx
     kubectl apply -f srcs/nginx/deployment.yaml
+
+    # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
+    
     minikube dashboard
 }
 
