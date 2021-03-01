@@ -91,6 +91,9 @@ function main() {
     kubectl apply -f srcs/mysql/secret.yaml
     kubectl apply -f srcs/mysql/service.yaml
 
+    kubectl apply -f srcs/wordpress/pvc.yaml
+    kubectl apply -f srcs/wordpress/deployment.yaml
+
     # https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
     # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
     
