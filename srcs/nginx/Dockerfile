@@ -6,8 +6,7 @@ MAINTAINER Henry Buisseret <hbuisser@student.s19.be>
 
 # Install core service
 RUN     apk update \
-        && apk add nginx \
-        && apk add openrc
+        && apk add nginx
 
 # Creating new user and group 'www' for nginx
 RUN     adduser -D -g 'www' www
@@ -30,7 +29,7 @@ COPY    ./index.html /www/
 
 # Indiquer le port sur lequel votre application écoute
 # 443 est le port https
-EXPOSE 80 443 22
+EXPOSE 80 443
 
 # Reload with the new config and start
 #RUN     rc-service nginx start

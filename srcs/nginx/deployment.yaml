@@ -49,7 +49,3 @@ spec:
       targetPort: 443
       name: https
       protocol: TCP
-    - port: 22
-      nodePort: 22
-      targetPort: 22
-      name: ssh

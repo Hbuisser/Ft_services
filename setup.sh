@@ -33,12 +33,12 @@ function check_docker() {
 function metalib_config() {
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
-    if [ "$(kubectl get secrets --namespace metallb-system | grep memberlist)" = "" ]
-    then
-        kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
-    fi
+    # if [ "$(kubectl get secrets --namespace metallb-system | grep memberlist)" = "" ]
+    # then
+    #     kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+    # fi
     # https://metallb.universe.tf/configuration/
-    kubectl apply -f srcs/metalib/config.yaml > /dev/null
+    kubectl apply -f srcs/metalib/config.yaml
 }
 
 function check_minikube() {
@@ -79,13 +79,14 @@ function check_brew() {
 function main() {
     #check_brew
     #check_minikube
-    #metalib_config
+    metalib_config
     #check_docker
-    #start_minikube
+    start_minikube
 
-    docker build srcs/nginx -t img-nginx
-    kubectl apply -f srcs/nginx/deployment.yaml
+    #docker build srcs/nginx -t img-nginx
+    #kubectl apply -f srcs/nginx/deployment.yaml
 
+    # https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
     # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
     
     minikube dashboard
