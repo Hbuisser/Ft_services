@@ -85,6 +85,8 @@ function main() {
 
     #docker build srcs/nginx -t img-nginx
     #kubectl apply -f srcs/nginx/deployment.yaml
+    kubectl apply -f srcs/mysql/pvc.yaml
+    kubectl apply -f srcs/mysql/deployment.yaml
 
     # https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
     # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48

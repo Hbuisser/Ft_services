@@ -1,0 +1,13 @@
+# https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
+
+apiVersion: v1 
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-storage # MARK Z
+  namespace: metallb-system
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
