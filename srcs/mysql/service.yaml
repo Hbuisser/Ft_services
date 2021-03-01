@@ -1,0 +1,18 @@
+# https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service # MARK B
+  namespace: metallb-system # Match with namespace
+spec:
+# We create a ClusterIP-typed Service because we want to expose mysql outside Deployment but still inside Namespace.
+  type: ClusterIP
+  ports:
+# represents a port to let someone connects to
+  - port: 3306 # MARK B.1
+    targetPort: 3306 # Must match with containerPort
+    protocol: TCP
+# The service use selector.app for pointing to the right deployment.
+  selector:
+    app: mysql # Must match with `MARK A` in mysql/deployment.yaml

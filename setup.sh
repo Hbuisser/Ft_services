@@ -1,6 +1,7 @@
 #! /bin/sh
 
 function start_minikube() {
+    minikube stop
     minikube delete --all
     # Create the Namespace (VM) that wrap everything 
     # => Minikube for creating it localy
@@ -77,16 +78,18 @@ function check_brew() {
 }
 
 function main() {
-    #check_brew
-    #check_minikube
+    check_brew
+    check_minikube
     metalib_config
-    #check_docker
+    check_docker
     start_minikube
 
     #docker build srcs/nginx -t img-nginx
     #kubectl apply -f srcs/nginx/deployment.yaml
     kubectl apply -f srcs/mysql/pvc.yaml
     kubectl apply -f srcs/mysql/deployment.yaml
+    kubectl apply -f srcs/mysql/secret.yaml
+    kubectl apply -f srcs/mysql/service.yaml
 
     # https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
     # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
