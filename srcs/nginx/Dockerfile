@@ -1,6 +1,6 @@
 # https://wiki.alpinelinux.org/wiki/Nginx
 
-FROM alpine:latest
+FROM alpine:3.12
 
 MAINTAINER Henry Buisseret <hbuisser@student.s19.be>
 
