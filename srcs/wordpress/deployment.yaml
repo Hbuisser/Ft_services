@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: metallb-system # Match with namespace
+  #namespace: metallb-system # Match with namespace
   name: wordpress # MARK C
   labels:
     app: wordpress # MARK C

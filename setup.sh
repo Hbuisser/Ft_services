@@ -12,7 +12,7 @@ function start_minikube() {
     minikube addons enable dashboard
     minikube addons enable metallb
 
-    minikube kubectl -- get po -A
+    #minikube kubectl -- get po -A
     # create the cluster
 
     # Start the docker environment on the Minikube VM
@@ -22,13 +22,14 @@ function start_minikube() {
 }
 
 # function metalib_config() {
-#     #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
-#     #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+#     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+#     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 #     kubectl apply -f srcs/metalib/config.yaml
 # }
 
 function main() {
-    #start_minikube()
+    #start_minikube
+    kubectl apply -f srcs/metalib/config.yaml
     minikube start --vm-driver=virtualbox
     minikube status
 
@@ -36,12 +37,10 @@ function main() {
     minikube addons enable dashboard
     minikube addons enable metallb
 
-    minikube kubectl -- get po -A
-    docker-machine rm default
-    docker-machine create --driver virtualbox default
-    eval $(docker-machine env default)
+    #docker-machine rm default
+    #docker-machine create --driver virtualbox default
+    #eval $(docker-machine env default)
     eval $(minikube docker-env)
-    kubectl apply -f srcs/metalib/config.yaml
 
     #docker build srcs/nginx -t img-nginx
     #kubectl apply -f srcs/nginx/deployment.yaml

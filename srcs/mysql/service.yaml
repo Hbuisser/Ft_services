@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service # MARK B
-  namespace: metallb-system # Match with namespace
+  #namespace: metallb-system # Match with namespace
 spec:
 # We create a ClusterIP-typed Service because we want to expose mysql outside Deployment but still inside Namespace.
   type: ClusterIP
