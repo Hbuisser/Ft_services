@@ -42,10 +42,12 @@ function main() {
     #eval $(docker-machine env default)
     eval $(minikube docker-env)
 
-    #docker build srcs/nginx -t img-nginx
-    #kubectl apply -f srcs/nginx/deployment.yaml
-    kubectl apply -f srcs/mysql/pvc.yaml
+    docker build srcs/nginx -t nginx
+    kubectl apply -f srcs/nginx/deployment.yaml
+
+    docker build srcs/mysql -t mysql
     kubectl apply -f srcs/mysql/deployment.yaml
+    kubectl apply -f srcs/mysql/pvc.yaml
     kubectl apply -f srcs/mysql/secret.yaml
     kubectl apply -f srcs/mysql/service.yaml
 
