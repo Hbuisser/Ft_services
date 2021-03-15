@@ -52,23 +52,22 @@ function main() {
 
     docker build srcs/wordpress -t wordpress
     kubectl apply -f srcs/wordpress/deployment.yaml
-    #kubectl apply -f srcs/wordpress/pvc.yaml
-    
-    # docker build srcs/mysql -t mysql
+
+    #docker build srcs/mysql -t mysql
     # kubectl apply -f srcs/mysql/deployment.yaml
     # kubectl apply -f srcs/mysql/pvc.yaml
     # kubectl apply -f srcs/mysql/secret.yaml
     # kubectl apply -f srcs/mysql/service.yaml
 
-
-    # https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
-    # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
-    
+    docker build srcs/phpmyadmin -t phpmyadmin
+    kubectl apply -f srcs/phpmyadmin/deployment.yaml 
 }
 
 main
 
 ### INFOS
+# https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
+# https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
 
 # Debug Docker
 # docker-machine rm default

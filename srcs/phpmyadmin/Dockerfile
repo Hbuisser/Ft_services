@@ -1,27 +1,30 @@
-FROM alpine
+FROM alpine:3.12
 
 MAINTAINER Henry Buisseret <hbuisser@student.s19.be>
 
-RUN		apk add wget php7 php7-fpm php7-opcache php7-gd 
-RUN     apk add php7-mysqli php7-zlib php7-curl php7-mbstring 
-RUN     apk add php7-json php7-session nginx
+RUN apk update && apk add openrc && apk add openssl && apk add wget && apk add nginx && apk add php7 php7-fpm php7-iconv php7-json php7-mbstring php7-mysqli php7-phar php7-session
 
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz 
-RUN	tar -zxzf phpMyAdmin-5.0.1-all-languages.tar.gz 
-RUN mv phpMyAdmin-5.0.1-all-languages /var/www/html/phpMyAdmin 
-RUN rm phpMyAdmin-5.0.1-all-languages.tar.gz \
-RUN mkdir /var/www/html/phpMyAdmin/tmp \
-RUN chmod 777 /var/www/html/phpMyAdmin/tmp
+#Get phpMyAdmin folder
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.tar.gz
+RUN tar -xvf phpMyAdmin-4.9.0.1-all-languages.tar.gz
+RUN mv phpMyAdmin-4.9.0.1-all-languages phpmyadmin
+RUN rm phpMyAdmin-4.9.0.1-all-languages.tar.gz
 
-ADD /srcs/nginx.conf /etc/nginx/sites-available/
-ADD /srcs/nginx.conf /etc/nginx/sites-enabled/
+#Set phpmyadmin and its config
+COPY /srcs/config.inc.php phpmyadmin/config.inc.php
 
-ADD /srcs/config.inc.php /var/www/html/phpMyAdmin
+# config nginx
+RUN adduser -D www; #Creation of user linked with nginx.conf, -D means default
+RUN chown -R www:www /var/lib/nginx
+RUN chown -R www:www /phpmyadmin
+COPY /srcs/nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /run/nginx 
+#Last command is demanded by "nginx -t" config file test, to create nginx.pid file
+RUN nginx -t
 
 EXPOSE 5000
 
-CMD /bin/bash ./srcs/phpmyadmin_config.sh
-
+CMD ["nginx", "-g", "daemon off;"]
 
 
 

@@ -37,6 +37,7 @@ metadata:
   #namespace: metallb-system # Match with namespace
 spec:
   type: LoadBalancer
+  loadBalancerIP: 192.168.1.241
   ports:
   - port: 5050 # Port that publicly exposed to internet
     targetPort: 5050 # Match with MARK C.1
