@@ -61,6 +61,9 @@ function main() {
 
     docker build srcs/phpmyadmin -t phpmyadmin
     kubectl apply -f srcs/phpmyadmin/deployment.yaml 
+
+    docker build srcs/ftps -t ftps
+    kubectl apply -f srcs/ftps/deployment.yaml
 }
 
 main
