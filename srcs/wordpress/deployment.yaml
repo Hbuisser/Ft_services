@@ -3,47 +3,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  #namespace: metallb-system # Match with namespace
-  name: wordpress # MARK C
+  name: wordpress
   labels:
-    app: wordpress # MARK C
+    app: wordpress
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: wordpress # MARK C
+      app: wordpress
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress # MARK C
+        app: wordpress
     spec:
       containers:
       - name: wordpress
         image: wordpress
         ports:
-        - containerPort: 80 # MARK C.1
-        env:
-        - name: WORDPRESS_DB_HOST
-          value: mysql-service:3306
-        - name: WORDPRESS_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: password
-        volumeMounts:
-          - name: wordpress-persistent-storage
-            mountPath: /var/www/html
-        imagePullPolicy: Always
-        readinessProbe:
-          httpGet:
-            path: /wp-admin/install.php # this path always returns 200 status code
-            port: 80
-          periodSeconds: 1
-          timeoutSeconds: 10
-          successThreshold: 1
-          failureThreshold: 10
-      restartPolicy: Always
-      volumes:
-        - name: wordpress-persistent-storage
-          persistentVolumeClaim:
-            claimName: wordpress-storage
+        - containerPort: 5050
+          name: http
+        imagePullPolicy: Never
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+  #namespace: metallb-system # Match with namespace
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5050 # Port that publicly exposed to internet
+    targetPort: 5050 # Match with MARK C.1
+    protocol: TCP
+  selector:
+    app: wordpress # Match with MARK C
+    tier: frontend

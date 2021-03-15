@@ -23,7 +23,17 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+          name: http
         - containerPort: 443
+          name: https
+        - containerPort: 22
+          name: ssh
+        env:
+        - name: SSH_USER
+          value: admin
+        - name: SSH_PASSWORD
+          value: admin
+
 
 ---
 
@@ -35,7 +45,7 @@ metadata:
     app: nginx
 spec:
 # NodePort type expose the container to the outside world 
-  type: NodePort
+  type: LoadBalancer
 # link the deployemnt with the pods
   selector:
     app: nginx
@@ -49,3 +59,8 @@ spec:
       targetPort: 443
       name: https
       protocol: TCP
+    - port: 22
+      targetPort: 22
+      name: ssh
+      protocol: TCP
+  

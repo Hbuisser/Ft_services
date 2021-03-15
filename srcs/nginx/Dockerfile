@@ -6,7 +6,8 @@ MAINTAINER Henry Buisseret <hbuisser@student.s19.be>
 
 # Install core service
 RUN     apk update \
-        && apk add nginx
+        && apk add nginx \
+        && apk add openssl
 
 # Creating new user and group 'www' for nginx
 RUN     adduser -D -g 'www' www
@@ -23,6 +24,10 @@ RUN     rm /etc/nginx/nginx.conf
 
 # Configuring Nginx to listen to port 80 and process .html or .htm files
 COPY    ./nginx.conf /etc/nginx/
+
+# install SSL
+RUN mkdir /etc/nginx/ssl \
+    && openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/www.pem -keyout /etc/nginx/ssl/www.key -subj “/C=BE/ST=Bxl/L=Bruxelles/O=s19/OU=Hbuisser/CN=ft_services”
 
 # Copy html into www
 COPY    ./index.html /www/

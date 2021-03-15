@@ -28,37 +28,42 @@ function start_minikube() {
 # }
 
 function main() {
-    #start_minikube
-    kubectl apply -f srcs/metalib/config.yaml
+    minikube stop
+    minikube delete --all
+
     minikube start --vm-driver=virtualbox
-    minikube status
 
     minikube addons enable metrics-server
     minikube addons enable dashboard
     minikube addons enable metallb
 
-    #docker-machine rm default
-    #docker-machine create --driver virtualbox default
-    #eval $(docker-machine env default)
+    # Create a cluster
+    minikube kubectl -- get po -A
+
+    minikube dashboard &
+
     eval $(minikube docker-env)
+    kubectl apply -f srcs/metalib/config.yaml
+
+    minikube status
 
     docker build srcs/nginx -t nginx
     kubectl apply -f srcs/nginx/deployment.yaml
 
-    docker build srcs/mysql -t mysql
-    kubectl apply -f srcs/mysql/deployment.yaml
-    kubectl apply -f srcs/mysql/pvc.yaml
-    kubectl apply -f srcs/mysql/secret.yaml
-    kubectl apply -f srcs/mysql/service.yaml
-
-    kubectl apply -f srcs/wordpress/pvc.yaml
+    docker build srcs/wordpress -t wordpress
     kubectl apply -f srcs/wordpress/deployment.yaml
-    kubectl apply -f srcs/wordpress/service.yaml
+    #kubectl apply -f srcs/wordpress/pvc.yaml
+    
+    # docker build srcs/mysql -t mysql
+    # kubectl apply -f srcs/mysql/deployment.yaml
+    # kubectl apply -f srcs/mysql/pvc.yaml
+    # kubectl apply -f srcs/mysql/secret.yaml
+    # kubectl apply -f srcs/mysql/service.yaml
+
 
     # https://medium.com/@taweesoft/chapter-1-how-to-easily-deploy-your-web-on-kubernetes-83209a8618be
     # https://blog.gojekengineering.com/diy-set-up-telegraf-influxdb-grafana-on-kubernetes-d55e32f8ce48
     
-    minikube dashboard
 }
 
 main
@@ -107,3 +112,8 @@ main
 
 # ON VM(linux)
 # https://www.notion.so/Ft_services-VM-852d4f9b0d9a42c1a2de921e4a2ac417
+
+
+#docker-machine rm default
+#docker-machine create --driver virtualbox default
+#eval $(docker-machine env default)
